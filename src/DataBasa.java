@@ -12,13 +12,14 @@ public class DataBasa {
     public static void nullCout(Employee[] arr) {
         for (byte i = 0; i < arr.length; i++) {
             if (arr[i] == null) {
+                System.out.println(arr[i]);
                 throw new NullPointerException("Нет данных о сотруднике с идентификаторром " + i);
             }
         }
     }
 
 
-    public static void addEmployee(Employee[] arr) {
+    public static void printEmployees(Employee[] arr) {
         for (byte i = 0; i < arr.length; i++) {
             System.out.println(arr[i]);
         }
@@ -35,7 +36,7 @@ public class DataBasa {
         return sum;
     }
 
-    public static void EmployeeWithMaxSalary(Employee[] arr) {
+    public static void employeeWithMaxSalary(Employee[] arr) {
         float max = 0f;
         byte k = 0;
         for (byte i = 0; i < arr.length; i++) {
@@ -49,18 +50,16 @@ public class DataBasa {
         System.out.println("Максимальная зарплата у " + arr[k]);
     }
 
-    public static void EmployeeWithMinSalary(Employee[] arr) {
+    public static void employeeWithMinSalary(Employee[] arr) {
         float min = arr[0].getSalary();
         byte k = 0;
         for (byte i = 1; i < arr.length; i++) {
-            if (arr[i] != null) {
-                {
-                    if (min > arr[i].getSalary()) {
-                        min = arr[i].getSalary();
-                        k = i;
-                    }
+            if (arr[i] != null)
+
+                if (min > arr[i].getSalary()) {
+                    min = arr[i].getSalary();
+                    k = i;
                 }
-            }
         }
         System.out.println("Минимальная зарплата у " + arr[k]);
     }
@@ -81,47 +80,52 @@ public class DataBasa {
     }
 
 
-    public static byte departmentPeopl(Employee[] arr, byte number) {
+    public static byte departmentPeople(Employee[] arr, byte number) {
         byte j = 0;
         if (number > 6 || number < 1) {
             throw new IllegalArgumentException("Введен неверный отдел");
         } else {
 
             for (byte i = 0; i < arr.length; i++) {
-                if (arr[i].getDepartment() == number) {
-                    j++;
+                if (arr[i] != null) {
+                    if (arr[i].getDepartment() == number) {
+                        j++;
+                    }
                 }
             }
+            return j;
         }
-        return j;
     }
 
     public static float departmentSalarySum(Employee[] arr, byte number) {
         float sum = 0f;
-        if (departmentPeopl(arr, number) > 0) {
+        if (departmentPeople(arr, number) > 0) {
             for (byte i = 0; i < arr.length; i++) {
                 if (arr[i].getDepartment() == number) {
-                    sum = sum + arr[i].getSalary();
+                    if (arr[i] != null) {
+                        sum = sum + arr[i].getSalary();
+                    }
+
+                    System.out.println("В отделе " + number + " сумарная зарплата=" + sum);
+                } else {
+                    System.out.println("В отделе " + number + " нет сотрудников");
                 }
             }
-            System.out.println("В отделе " + number + " сумарная зарплата=" + sum);
-        } else {
-            System.out.println("В отделе " + number + " нет сотрудников");
         }
-        return  sum;
+        return sum;
     }
 
     public static void departmentArgeSalary(Employee[] arr, byte number) {
-        float sum=departmentSalarySum(arr,number);
-        byte k= departmentPeopl(arr, number);
-        if (k>0){
-            System.out.println("Средняя зарплата в отделе "+number+ ": "+sum/k);
+        float sum = departmentSalarySum(arr, number);
+        byte k = departmentPeople(arr, number);
+        if (k > 0) {
+            System.out.println("Средняя зарплата в отделе " + number + ": " + sum / k);
         }
     }
 
 
     public static void departmentMaxSalary(Employee[] arr, byte number) {
-        if (departmentPeopl(arr, number) > 0) {
+        if (departmentPeople(arr, number) > 0) {
             float max = 0f;
             byte t = 0;
             for (byte i = 0; i < arr.length; i++) {
@@ -139,7 +143,7 @@ public class DataBasa {
     }
 
     public static void departmentMinSalary(Employee[] arr, byte number) {
-        if (departmentPeopl(arr, number) > 0) {
+        if (departmentPeople(arr, number) > 0) {
             byte t = 0;
             float min = 70000000;
             for (byte i = 0; i < arr.length; i++) {
@@ -157,7 +161,7 @@ public class DataBasa {
     }
 
     public static void departmentPercentSalary(Employee[] arr, byte number, float percent) {
-        if (departmentPeopl(arr, number) > 0) {
+        if (departmentPeople(arr, number) > 0) {
             for (byte i = 0; i < arr.length; i++) {
                 if (arr[i].getDepartment() == number) {
                     arr[i].setSalary(arr[i].getSalary() + arr[i].getSalary() * percent);
@@ -170,13 +174,12 @@ public class DataBasa {
 
     }
 
-    public static void department(Employee[] arr, byte number) {
-        if (departmentPeopl(arr, number) > 0) {
-            System.out.println("Сотрудники отдела " + number+" :");
+    public static void searchByDepartment(Employee[] arr, byte number) {
+        if (departmentPeople(arr, number) > 0) {
+            System.out.println("Сотрудники отдела " + number + " :");
             for (byte i = 0; i < arr.length; i++) {
                 if (arr[i].getDepartment() == number) {
                     System.out.println(arr[i].getFirstName() + " " + arr[i].getLastName());
-
                 }
             }
         } else {
@@ -185,23 +188,23 @@ public class DataBasa {
 
     }
 
-    public static void compareSalary(Employee[] arr, float salary){
-        for (byte i = 0; i < arr.length; i++){
-            if (arr[i]!=null){
-                if(arr[i].getSalary()<salary){
-                    System.out.println("Зарплата работника "+arr[i].getLastName()+ " меньше введенной " +
-                            " и равна= "+arr[i].getSalary());
+    public static void compareSalary(Employee[] arr, float salary) {
+        for (byte i = 0; i < arr.length; i++) {
+            if (arr[i] != null) {
+                if (arr[i].getSalary() < salary) {
+                    System.out.println("Зарплата работника " + arr[i].getLastName() + " меньше введенной " +
+                            " и равна= " + arr[i].getSalary());
                 }
             }
         }
     }
 
-    public static void compareHigherSalary(Employee[] arr, float salary){
-        for (byte i = 0; i < arr.length; i++){
-            if (arr[i]!=null){
-                if(arr[i].getSalary()>salary){
-                    System.out.println("Зарплата работника "+arr[i].getLastName()+ " больше введенной " +
-                            " и равна= "+arr[i].getSalary());
+    public static void compareHigherSalary(Employee[] arr, float salary) {
+        for (byte i = 0; i < arr.length; i++) {
+            if (arr[i] != null) {
+                if (arr[i].getSalary() > salary) {
+                    System.out.println("Зарплата работника " + arr[i].getLastName() + " больше введенной " +
+                            " и равна= " + arr[i].getSalary());
                 }
             }
         }
